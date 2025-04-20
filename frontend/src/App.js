@@ -2,7 +2,7 @@ import React from 'react'
 
 const App = () => {
   return (
-    <div>Asilbek</div>
+    <div>Asilbek tog'o</div>
   )
 }
 
