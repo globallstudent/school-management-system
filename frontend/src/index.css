@@ -1,10 +1,19 @@
 @import "tailwindcss";
 
 
-body{
+/* body{
   background-image: url(/bg-main.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   background-clip: border-box;
+} */
+
+
+html{
+  height: 100%;
+}
+
+.image-shadow{
+  filter: drop-shadow(1px 1px 2px #fff);
 }

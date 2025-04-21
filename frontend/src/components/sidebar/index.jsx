@@ -2,11 +2,25 @@ import { useState } from "react";
 import {
   Home,
   Users,
+  UserCog,
   BookOpen,
   Settings,
   ChevronLeft,
   ChevronRight,
+  CheckSquare,
+  LayoutGrid,
 } from "lucide-react";
+
+import { GiTeacher } from "react-icons/gi";
+import { PiStudentFill } from "react-icons/pi";
+import { TbBooks } from "react-icons/tb";
+import { MdMeetingRoom } from "react-icons/md";
+import { GrCertificate } from "react-icons/gr";
+import { MdAssignmentAdd } from "react-icons/md";
+import { TbDeviceAnalytics } from "react-icons/tb";
+import { FaRegCalendarAlt } from "react-icons/fa";
+
+
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { NavLink } from "react-router-dom"; // Import NavLink
 import useLayoutStore from "./../../store/layout-control/index";
@@ -19,22 +33,29 @@ const Sidebar = () => {
 
   const navItems = [
     { label: "Dashboard", icon: Home, path: "/dashboard" },
-    { label: "Students", icon: Users, path: "/students" },
-    { label: "Teachers", icon: BookOpen, path: "/teachers" },
-    { label: "Parents", icon: BookOpen, path: "/parents" },
+    { label: "Teachers", icon: GiTeacher, path: "/teachers" },
+    { label: "Students", icon: PiStudentFill, path: "/students" },
+    { label: "Parents", icon: Users, path: "/parents" },
+    { label: "Subjects", icon: TbBooks, path: "/subjects" },
+    { label: "Classes", icon: MdMeetingRoom, path: "/classes" },
+    { label: "Exams", icon: GrCertificate, path: "/exams" },
+    { label: "Assignments", icon: MdAssignmentAdd, path: "/assignments" },
+    { label: "Results", icon: TbDeviceAnalytics, path: "/results" },
+    { label: "Attendance", icon: CheckSquare, path: "/attendance" },
+    { label: "Events", icon: FaRegCalendarAlt, path: "/events" },
   ];
 
   return (
     <div
-      className={`fixed left-5 top-20 mb-[20px] h-[88%] flex flex-col transition-all duration-300 ease-in-out
-        ${isOpen ? "w-64 rounded-[30px]" : "w-[70px] rounded-[50px]"}
+      className={`fixed left-5 top-20 mb-[20px] h-[calc(100vh-5.9rem)]  flex flex-col transition-all duration-300 ease-in-out
+        ${isOpen ? "w-54 rounded-[30px]" : "w-[70px] rounded-[50px]"}
         ${bgMainColor}
         border-[#fff] border-[2px]`}
     >
       {/* Toggle button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`absolute -right-5 top-12 bg-[#fff] w-[30px] h-[70px] flex justify-center items-center cursor-pointer rounded-full p-1 shadow-md z-10
+        className={`absolute -right-5 top-12 bg-[#fff] w-[30px] h-[70px] flex justify-center items-center cursor-pointer rounded-full p-1 shadow-[#093f9f] shadow-sm z-10
           ${isOpen ? "rotate-180" : ""}`}
       >
         {isOpen ? (
@@ -67,7 +88,7 @@ const Sidebar = () => {
             end // Ensure the active state works correctly
           >
             <item.icon
-              size={30}
+              size={20}
               className={`${
                 activeItem === item.label
                   ? "text-[#093f9f]"
@@ -109,7 +130,7 @@ const Sidebar = () => {
         end
       >
         <Settings
-          size={30}
+          size={20}
           className={` group-hover:text-[#093f9f] ${
             activeItem === "Settings"
               ? "text-[#093f9f]"
@@ -131,6 +152,14 @@ const Sidebar = () => {
       <ReactTooltip id="Dashboard" place="right" />
       <ReactTooltip id="Students" place="right" />
       <ReactTooltip id="Lessons" place="right" />
+      <ReactTooltip id="Parents" place="right" />
+      <ReactTooltip id="Subjects" place="right" />
+      <ReactTooltip id="Classes" place="right" />
+      <ReactTooltip id="Exams" place="right" />
+      <ReactTooltip id="Assignments" place="right" />
+      <ReactTooltip id="Results" place="right" />
+      <ReactTooltip id="Attendance" place="right" />
+      <ReactTooltip id="Events" place="right" />
       <ReactTooltip id="Settings" place="right" />
     </div>
   );

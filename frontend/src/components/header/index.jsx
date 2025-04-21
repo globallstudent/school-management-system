@@ -10,12 +10,16 @@ const Header = () => {
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
   return (
-    <header className=" fixed top-3 rounded-[50px] py-2  right-4 left-4 max-w-[2000px]  px-[20px]  flex justify-between items-center bg-white">
+    <header className="mt-[10px] fixed left-[20px] right-[20px] rounded-[50px] py-2 px-[20px] flex justify-between items-center bg-[#093f9f] backdrop-blur-2xl z-50">
       {/* Logo yoki boshqa elementi */}
-      <NavLink to="/d" >
-        <img width={50} src="/public/logo.jpg" alt="logo" />
+      <NavLink to="/">
+        <img
+          className="image-shadow"
+          width={50}
+          src="/public/logo.svg"
+          alt="logo"
+        />
       </NavLink>
-
       {/* Header options */}
       <div className="flex items-center space-x-6">
         {/* Notification icon */}
