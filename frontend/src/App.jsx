@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Button } from "./components/ui/button";
-import { Input } from "./components/ui/input";
 import Layout from "./components/layout/index";
 import { BrowserRouter, Routes, Route } from "react-router-dom"; // Route import qilishni unutmang
 import DashboardPage from "./pages/dashboard";
