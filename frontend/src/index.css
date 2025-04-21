@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+
+body{
+  background-image: url(/bg-main.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-clip: border-box;
+}
