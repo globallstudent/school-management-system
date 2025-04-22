@@ -47,7 +47,7 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`fixed left-5 top-20 mb-[20px] h-[calc(100vh-5.9rem)]  flex flex-col transition-all duration-300 ease-in-out
+      className={`fixed left-5 z-[100000] top-20 mb-[20px] h-[calc(100vh-5.9rem)]  flex flex-col transition-all duration-300 ease-in-out
         ${isOpen ? "w-54 rounded-[30px]" : "w-[70px] rounded-[50px]"}
         ${bgMainColor}
         border-[#fff] border-[2px]`}

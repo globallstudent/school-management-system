@@ -1,19 +1,24 @@
 @import "tailwindcss";
 
 
-/* body{
-  background-image: url(/bg-main.jpg);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-clip: border-box;
-} */
-
-
 html{
   height: 100%;
 }
 
 .image-shadow{
   filter: drop-shadow(1px 1px 2px #fff);
+}
+
+/* Scrollbarning ko‘rinishini o‘zgartirish */
+.scroll-container::-webkit-scrollbar {
+  width: 3px;      /* Scrollning kengligi */
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: white;  /* Scrollning asosiy rangi */
+  border-radius: 10px;     /* Yumaloq burchaklar */
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: #555;  /* Hover holatidagi rang */
 }

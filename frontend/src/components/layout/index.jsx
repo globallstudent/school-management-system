@@ -30,9 +30,9 @@ const Layout = () => {
         {/* Sidebar */}
         <Sidebar />
         <main
-          className={`flex flex-1 w-full rounded-[25px] bg-gray-100 mr-[20px]  ${
+          className={`flex flex-1 w-full rounded-[25px] bg-blue-100 overflow-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-500 scroll-container mr-[20px]  ${
             width < 700 ? "ml-30" : isOpen ? "ml-67" : "ml-30"
-          }  transition-all mt-[20px]  p-[20px] duration-300 ease-in-out  overflow-y-auto`}
+          }  transition-all mt-[20px]  p-[20px] duration-300 ease-in-out`}
         >
           <div className=" h-full w-full ">
             <Outlet />
