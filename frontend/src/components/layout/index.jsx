@@ -23,18 +23,20 @@ const Layout = () => {
       }, [window.innerWidth]);
 
   return (
-    <div className="h-screen">
+    <div className="h-[100%]">
       {/* Header, sidebarning ustida bo'ladi */}
       <Header />
-      <div className="flex flex-1 pb-10  ">
+      <div className="flex h-[100%]  flex-1 pb-4 pt-[65px] ">
         {/* Sidebar */}
         <Sidebar />
         <main
-          className={`flex-1  ${
-            width < 700 ? "ml-30" : isOpen ? "ml-77" : "ml-30"
-          } h-full  transition-all mt-[60px]  p-[20px] duration-300 ease-in-out  overflow-y-auto`}
+          className={`flex flex-1 w-full rounded-[25px] bg-blue-100 overflow-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-500 scroll-container mr-[20px]  ${
+            width < 700 ? "ml-30" : isOpen ? "ml-67" : "ml-30"
+          }  transition-all mt-[20px]  p-[20px] duration-300 ease-in-out`}
         >
-          <Outlet />
+          <div className=" h-full w-full ">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>
