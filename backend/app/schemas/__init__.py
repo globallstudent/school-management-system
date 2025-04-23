@@ -3,7 +3,7 @@ from .announcement import *
 from .assignment import *
 from .attendance import *
 from .classes import *
-from .event import  *
+from .event import *
 from .exam import *
 from .grade import *
 from .lesson import *

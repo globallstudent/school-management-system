@@ -2,6 +2,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, String
 from app.core.db import Base
 
+
 class Admin(Base):
     __tablename__ = "admins"
 
