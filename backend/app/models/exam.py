@@ -13,7 +13,7 @@ class Exam(Base):
     start_time: Mapped[datetime] = mapped_column(DateTime)
     end_time: Mapped[datetime] = mapped_column(DateTime)
 
-    # Foreign keys    lesson_id: Mapped[int] = mapped_column(ForeignKey("lessons.id"))
+    lesson_id: Mapped[int] = mapped_column(ForeignKey("lessons.id"))
 
     lesson: Mapped["Lesson"] = relationship("Lesson", back_populates="exams")
     results: Mapped[List["Result"]] = relationship(back_populates="exam")

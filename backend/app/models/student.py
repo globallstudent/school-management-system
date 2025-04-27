@@ -15,13 +15,12 @@ class Student(Base):
 
     id: Mapped[str] = mapped_column(String, primary_key=True)
     username: Mapped[str] = mapped_column(String, unique=True)
-    name: Mapped[str] = mapped_column(String)
-    surname: Mapped[str] = mapped_column(String)
+    first_name: Mapped[str] = mapped_column(String)
+    last_name: Mapped[str] = mapped_column(String)
     email: Mapped[Optional[str]] = mapped_column(String, unique=True, nullable=True)
     phone: Mapped[Optional[str]] = mapped_column(String, unique=True, nullable=True)
     address: Mapped[str] = mapped_column(String)
     img: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    blood_type: Mapped[str] = mapped_column(String)
     sex: Mapped[UserSex] = mapped_column(Enum(UserSex))
     created_at: Mapped[datetime] = mapped_column(
         DateTime, default=lambda: datetime.now(timezone.utc)

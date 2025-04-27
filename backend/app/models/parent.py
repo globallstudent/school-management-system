@@ -10,8 +10,8 @@ class Parent(Base):
 
     id: Mapped[str] = mapped_column(String, primary_key=True)
     username: Mapped[str] = mapped_column(String, unique=True)
-    name: Mapped[str] = mapped_column(String)
-    surname: Mapped[str] = mapped_column(String)
+    first_name: Mapped[str] = mapped_column(String)
+    last_name: Mapped[str] = mapped_column(String)
     email: Mapped[Optional[str]] = mapped_column(String, unique=True, nullable=True)
     phone: Mapped[str] = mapped_column(String, unique=True)
     address: Mapped[str] = mapped_column(String)

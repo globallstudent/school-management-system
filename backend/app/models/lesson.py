@@ -1,8 +1,16 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, DateTime, ForeignKey, Boolean
+from sqlalchemy import Integer, String, DateTime, ForeignKey, Boolean, Enum
 from datetime import datetime
 from typing import Optional, List
 from app.core.db import Base
+
+class Day(str, Enum):
+    MONDAY = "MONDAY"
+    TUESDAY = "TUESDAY"
+    WEDNESDAY = "WEDNESDAY"
+    THURSDAY = "THURSDAY"
+    FRIDAY = "FRIDAY"
+    SATURDAY = "SATURDAY"
 
 
 class Lesson(Base):
@@ -10,7 +18,7 @@ class Lesson(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String)
-    day: Mapped[Day] = mapped_column(SQLAEnum(Day))
+    day: Mapped[Day] = mapped_column(Enum(Day))
     start_time: Mapped[datetime] = mapped_column(DateTime)
     end_time: Mapped[datetime] = mapped_column(DateTime)
 
