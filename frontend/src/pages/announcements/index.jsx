@@ -2,7 +2,9 @@ import React from 'react'
 
 const AnnouncementsPage = () => {
   return (
-    <div>AnnouncementsPage</div>
+    <div className='bg-white p-4 rounded-md'>
+     AnnouncementPage
+    </div>
   )
 }
 
