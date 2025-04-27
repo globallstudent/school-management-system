@@ -22,3 +22,18 @@ html{
 .scroll-container::-webkit-scrollbar-thumb:hover {
   background-color: #555;  /* Hover holatidagi rang */
 }
+
+.react-calendar{
+  width: 100% !important;
+  border: none !important;
+  font-family: "Inter" ,sans-serif !important;
+}
+
+.react-calendar__navigate__label__labelText{
+  font-weight: 6000;
+}
+
+.react-calendar__title--active{
+  background-color: #c3ebfa important;
+  color: black !important;
+}
