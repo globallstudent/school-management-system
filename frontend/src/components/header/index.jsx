@@ -16,7 +16,7 @@ const Header = () => {
         <img
           className="image-shadow"
           width={50}
-          src="/public/logo.svg"
+          src="/logo.svg"
           alt="logo"
         />
       </NavLink>
