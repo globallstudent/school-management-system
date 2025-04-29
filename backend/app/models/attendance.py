@@ -1,21 +1,14 @@
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, DateTime, ForeignKey, Boolean
-from datetime import datetime
-from typing import Optional, List
+from sqlalchemy import Column, Integer, Boolean, ForeignKey, String
+from sqlalchemy.orm import relationship
 from app.core.db import Base
-
 
 class Attendance(Base):
     __tablename__ = "attendances"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    date: Mapped[datetime] = mapped_column(DateTime)
-    present: Mapped[bool] = mapped_column(Boolean)
+    id = Column(Integer, primary_key=True, index=True)
+    student_id = Column(String, ForeignKey("students.id"), nullable=False)
+    lesson_id = Column(Integer, ForeignKey("lessons.id"), nullable=False)
+    present = Column(Boolean, default=True)
 
-    # Foreign keys
-    student_id: Mapped[str] = mapped_column(ForeignKey("students.id"))
-    lesson_id: Mapped[int] = mapped_column(ForeignKey("lessons.id"))
-
-    # Relationships
-    student: Mapped["Student"] = relationship("Student", back_populates="attendances")
-    lesson: Mapped["Lesson"] = relationship("Lesson", back_populates="attendances")
+    student = relationship("Student", back_populates="attendances")
+    lesson = relationship("Lesson", back_populates="attendances")

@@ -1,29 +1,21 @@
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, DateTime, ForeignKey, Boolean
-from datetime import datetime
-from typing import Optional, List
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 from app.core.db import Base
-
 
 class Class(Base):
     __tablename__ = "classes"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(String, unique=True)
-    capacity: Mapped[int] = mapped_column(Integer)
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, nullable=False)
+    capacity = Column(Integer, nullable=False)
 
-    # Foreign keys
-    supervisor_id: Mapped[Optional[str]] = mapped_column(
-        ForeignKey("teachers.id"), nullable=True
-    )
-    grade_id: Mapped[int] = mapped_column(ForeignKey("grades.id"))
+    supervisor_id = Column(String, ForeignKey("teachers.id"), nullable=True)
+    grade_id = Column(Integer, ForeignKey("grades.id"), nullable=False)
 
-    # Relationships
-    supervisor: Mapped[Optional["Teacher"]] = relationship(
-        "Teacher", back_populates="supervised_classes"
-    )
-    lessons: Mapped[List["Lesson"]] = relationship(back_populates="class_")
-    students: Mapped[List["Student"]] = relationship(back_populates="class_")
-    grade: Mapped["Grade"] = relationship(back_populates="classes")
-    events: Mapped[List["Event"]] = relationship(back_populates="class_")
-    announcements: Mapped[List["Announcement"]] = relationship(back_populates="class_")
+    supervisor = relationship("Teacher", back_populates="classes")
+    grade = relationship("Grade", back_populates="classes")
+
+    lessons = relationship("Lesson", back_populates="class_")
+    students = relationship("Student", back_populates="class_")
+    events = relationship("Event", back_populates="class_")
+    announcements = relationship("Announcement", back_populates="class_")

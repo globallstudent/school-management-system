@@ -1,19 +1,16 @@
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, DateTime, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
 from datetime import datetime
-from typing import Optional, List
 from app.core.db import Base
-
 
 class Exam(Base):
     __tablename__ = "exams"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    title: Mapped[str] = mapped_column(String)
-    start_time: Mapped[datetime] = mapped_column(DateTime)
-    end_time: Mapped[datetime] = mapped_column(DateTime)
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    start_time = Column(DateTime, nullable=False)
+    end_time = Column(DateTime, nullable=False)
 
-    # Foreign keys    lesson_id: Mapped[int] = mapped_column(ForeignKey("lessons.id"))
+    lesson_id = Column(Integer, ForeignKey("lessons.id"), nullable=False)
 
-    lesson: Mapped["Lesson"] = relationship("Lesson", back_populates="exams")
-    results: Mapped[List["Result"]] = relationship(back_populates="exam")
+    lesson = relationship("Lesson", back_populates="exams")
