@@ -1,41 +1,36 @@
+<<<<<<< HEAD
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, DateTime, ForeignKey, Enum
 from datetime import datetime, timezone
 from typing import Optional, List
+=======
+from sqlalchemy import Column, String, DateTime, ForeignKey, Integer
+from sqlalchemy.orm import relationship
+from datetime import datetime
+>>>>>>> 3a65f88e582f25320a11617ef96d5593226ef1b3
 from app.core.db import Base
-
-
-class UserSex(str, Enum):
-    MALE = "MALE"
-    FEMALE = "FEMALE"
-
 
 class Student(Base):
     __tablename__ = "students"
 
-    id: Mapped[str] = mapped_column(String, primary_key=True)
-    username: Mapped[str] = mapped_column(String, unique=True)
-    name: Mapped[str] = mapped_column(String)
-    surname: Mapped[str] = mapped_column(String)
-    email: Mapped[Optional[str]] = mapped_column(String, unique=True, nullable=True)
-    phone: Mapped[Optional[str]] = mapped_column(String, unique=True, nullable=True)
-    address: Mapped[str] = mapped_column(String)
-    img: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    blood_type: Mapped[str] = mapped_column(String)
-    sex: Mapped[UserSex] = mapped_column(Enum(UserSex))
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=lambda: datetime.now(timezone.utc)
-    )
-    birthday: Mapped[datetime] = mapped_column(DateTime)
+    id = Column(String, ForeignKey("users.id"), primary_key=True)
+    name = Column(String, nullable=False)
+    surname = Column(String, nullable=False)
+    address = Column(String, nullable=False)
+    phone = Column(String, unique=True, nullable=True)
+    email = Column(String, unique=True, nullable=True)
+    img = Column(String, nullable=True)
+    birthday = Column(DateTime, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
-    # Foreign keys
-    parent_id: Mapped[str] = mapped_column(ForeignKey("parents.id"))
-    class_id: Mapped[int] = mapped_column(ForeignKey("classes.id"))
-    grade_id: Mapped[int] = mapped_column(ForeignKey("grades.id"))
+    parent_id = Column(String, ForeignKey("parents.id"), nullable=False)
+    class_id = Column(Integer, ForeignKey("classes.id"), nullable=False)
+    grade_id = Column(Integer, ForeignKey("grades.id"), nullable=False)
 
-    # Relationships
-    parent: Mapped["Parent"] = relationship("Parent", back_populates="students")
-    class_: Mapped["Class"] = relationship("Class", back_populates="students")
-    grade: Mapped["Grade"] = relationship("Grade", back_populates="students")
-    attendances: Mapped[List["Attendance"]] = relationship(back_populates="student")
-    results: Mapped[List["Result"]] = relationship(back_populates="student")
+    user = relationship("User", back_populates="student")
+    parent = relationship("Parent", back_populates="students")
+    class_ = relationship("Class", back_populates="students")
+    grade = relationship("Grade", back_populates="students")
+
+    attendances = relationship("Attendance", back_populates="student")
+    results = relationship("Result", back_populates="student")

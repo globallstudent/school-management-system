@@ -1,24 +1,19 @@
+<<<<<<< HEAD
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, String, ForeignKey, Table, Column
 from typing import List
+=======
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
+>>>>>>> 3a65f88e582f25320a11617ef96d5593226ef1b3
 from app.core.db import Base
-
-teacher_subject = Table(
-    "teacher_subject",
-    Base.metadata,
-    Column("teacher_id", String, ForeignKey("teachers.id"), primary_key=True),
-    Column("subject_id", Integer, ForeignKey("subjects.id"), primary_key=True),
-)
-
+from .teacher import teacher_subject
 
 class Subject(Base):
     __tablename__ = "subjects"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(String, unique=True)
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, nullable=False)
 
-    # Relationships
-    teachers: Mapped[List["Teacher"]] = relationship(
-        secondary=teacher_subject, back_populates="subjects"
-    )
-    lessons: Mapped[List["Lesson"]] = relationship(back_populates="subject")
+    teachers = relationship("Teacher", secondary=teacher_subject, back_populates="subjects")
+    lessons = relationship("Lesson", back_populates="subject")
