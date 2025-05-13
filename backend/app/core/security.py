@@ -1,19 +1,12 @@
-from datetime import datetime
-from typing import Annotated
 
-import jwt
-from fastapi import Depends, FastAPI, HTTPException, Security, status
+from fastapi import FastAPI
 from fastapi.security import (
     OAuth2PasswordBearer,
-    OAuth2PasswordRequestForm,
-    SecurityScopes,
 )
 
-from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
 
-from app.core.db import db_dep
 
 from dotenv import load_dotenv
 import os

@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, DateTime, ForeignKey, Boolean, Table, Column
-from datetime import datetime
-from typing import Optional, List
+from sqlalchemy import Integer, String, ForeignKey, Table, Column
+from typing import List
 from app.core.db import Base
 
 teacher_subject = Table(
