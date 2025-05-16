@@ -69,6 +69,7 @@ const TeachersPage = () => {
           property="og:description"
           content="CRM tizimida mijozlar ro'yxati"
         />
+        <link rel="icon" type="image/svg+xml" sizes="64x64" href="/announcement.png" />
         <meta property="og:image" content="/login-icon.svg" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://yourdomain.com/mijozlar" />
