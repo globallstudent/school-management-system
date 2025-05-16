@@ -1,21 +1,18 @@
-
-
-/** @type {import('tailwindcss').Config} */
+// tailwind.config.js
 module.exports = {
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx,html}",
-  ],
+  content: ["./src/**/*.{js,jsx}"],
   theme: {
     extend: {
-      colors: {
-         lamaSky:"#c3ebfa",
-         lamaSkyLight:"#edf9fd",
-         lamaPurple:"#cfceff",
-         lamaPurpleLight:"#f1f0ff",
-         lamaYellow:"#fae27c",
-         lamaYellowLight:"#fefceb"
+      animation: {
+        "fade-in": "fadeIn 0.8s ease-out",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: 0, transform: "translateY(10px)" },
+          "100%": { opacity: 1, transform: "translateY(0)" },
+        },
       },
     },
   },
   plugins: [],
-}
+};

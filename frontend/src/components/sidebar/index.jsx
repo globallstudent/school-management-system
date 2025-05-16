@@ -20,7 +20,6 @@ import { MdAssignmentAdd } from "react-icons/md";
 import { TbDeviceAnalytics } from "react-icons/tb";
 import { FaRegCalendarAlt } from "react-icons/fa";
 
-
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { NavLink } from "react-router-dom"; // Import NavLink
 import useLayoutStore from "./../../store/layout-control/index";
@@ -31,19 +30,55 @@ const Sidebar = () => {
   const { isOpen, setIsOpen } = useLayoutStore();
   const [activeItem, setActiveItem] = useState("Dashboard");
 
-  const navItems = [
-    { label: "Dashboard", icon: Home, path: "/dashboard" },
-    { label: "Teachers", icon: GiTeacher, path: "/teachers" },
-    { label: "Students", icon: PiStudentFill, path: "/students" },
-    { label: "Parents", icon: Users, path: "/parents" },
-    { label: "Subjects", icon: TbBooks, path: "/subjects" },
-    { label: "Classes", icon: MdMeetingRoom, path: "/classes" },
-    { label: "Exams", icon: GrCertificate, path: "/exams" },
-    { label: "Assignments", icon: MdAssignmentAdd, path: "/assignments" },
-    { label: "Results", icon: TbDeviceAnalytics, path: "/results" },
-    { label: "Attendance", icon: CheckSquare, path: "/attendance" },
-    { label: "Events", icon: FaRegCalendarAlt, path: "/events" },
-  ];
+  const userRole = "admin"
+
+  const navItemsByRole = {
+    admin: [
+      { label: "Dashboard", icon: Home, path: "admin/dashboard" },
+      { label: "Teachers", icon: GiTeacher, path: "admin/teachers" },
+      { label: "Students", icon: PiStudentFill, path: "admin/students" },
+      { label: "Parents", icon: Users, path: "admin/parents" },
+      { label: "Subjects", icon: TbBooks, path: "admin/subjects" },
+      { label: "Classes", icon: MdMeetingRoom, path: "admin/classes" },
+      { label: "Exams", icon: GrCertificate, path: "admin/exams" },
+      { label: "Assignments", icon: MdAssignmentAdd, path: "admin/assignments" },
+      { label: "Results", icon: TbDeviceAnalytics, path: "admin/results" },
+      { label: "Attendance", icon: CheckSquare, path: "admin/attendance" },
+      { label: "Events", icon: FaRegCalendarAlt, path: "admin/events" },
+    ],
+    teacher: [
+      { label: "Dashboard", icon: Home, path: "teacher/dashboard" },
+      { label: "Students", icon: PiStudentFill, path: "teacher/students" },
+      { label: "Subjects", icon: TbBooks, path: "teacher/subjects" },
+      { label: "Assignments", icon: MdAssignmentAdd, path: "teacher/assignments" },
+      { label: "Results", icon: TbDeviceAnalytics, path: "teacher/results" },
+      { label: "Attendance", icon: CheckSquare, path: "teacher/attendance" },
+      { label: "Events", icon: FaRegCalendarAlt, path: "teacher/events" },
+    ],
+    student: [
+      { label: "Dashboard", icon: Home, path: "student/dashboard" },
+      { label: "Subjects", icon: TbBooks, path: "student/subjects" },
+      { label: "Exams", icon: GrCertificate, path: "student/exams" },
+      { label: "Results", icon: TbDeviceAnalytics, path: "student/results" },
+      { label: "Attendance", icon: CheckSquare, path: "student/attendance" },
+      { label: "Events", icon: FaRegCalendarAlt, path: "student/events" },
+    ],
+    parent: [
+      { label: "Dashboard", icon: Home, path: "parent/dashboard" },
+      { label: "Students", icon: PiStudentFill, path: "parent/students" },
+      { label: "Results", icon: TbDeviceAnalytics, path: "parent/results" },
+      { label: "Attendance", icon: CheckSquare, path: "parent/attendance" },
+      { label: "Events", icon: FaRegCalendarAlt, path: "parent/events" },
+    ],
+    staff: [
+      { label: "Dashboard", icon: Home, path: "staff/dashboard" },
+      { label: "Teachers", icon: GiTeacher, path: "staff/teachers" },
+      { label: "Classes", icon: MdMeetingRoom, path: "staff/classes" },
+      { label: "Subjects", icon: TbBooks, path: "staff/subjects" },
+      { label: "Attendance", icon: CheckSquare, path: "staff/attendance" },
+      { label: "Events", icon: FaRegCalendarAlt, path: "staff/events" },
+    ],
+  };
 
   return (
     <div
@@ -67,22 +102,22 @@ const Sidebar = () => {
 
       {/* Main menu (top part) */}
       <div className="flex-1 flex flex-col pt-5">
-        {navItems.map((item) => (
+        {navItemsByRole[userRole]?.map((item) => (
           <NavLink
             key={item.label}
             to={item.path} // Use NavLink's `to` prop for routing
             onClick={() => setActiveItem(item.label)}
             className={`flex items-center cursor-pointer transition-all my-1
-              rounded-lg text-[16px] group ${
-                isOpen
-                  ? "px-3 h-[40px] mx-2"
-                  : "flex justify-center mx-auto w-[40px] h-[40px]"
-              }
-              ${
-                activeItem === item.label
-                  ? "bg-white bg-opacity-20 text-[#093f9f]"
-                  : "hover:bg-blue-100 hover:bg-opacity-10 text-[#093f9f] opacity-70"
-              }`}
+      rounded-lg text-[16px] group ${
+        isOpen
+          ? "px-3 h-[40px] mx-2"
+          : "flex justify-center mx-auto w-[40px] h-[40px]"
+      }
+      ${
+        activeItem === item.label
+          ? "bg-white bg-opacity-20 text-[#093f9f]"
+          : "hover:bg-blue-100 hover:bg-opacity-10 text-[#093f9f] opacity-70"
+      }`}
             data-tooltip-id={item.label} // Tooltip for id
             data-tooltip-content={isOpen ? "" : item.label} // Tooltip is shown only when sidebar is closed
             end // Ensure the active state works correctly
@@ -111,8 +146,9 @@ const Sidebar = () => {
       </div>
 
       {/* Settings (bottom part) */}
-      <NavLink
-        to="/settings" // Path for settings
+      {
+      userRole === "admin" ?  <NavLink
+        to="admin/settings" // Path for settings
         onClick={() => setActiveItem("Settings")}
         className={`flex items-center cursor-pointer transition-all my-1
           rounded-lg mb-5 text-[16px] group ${
@@ -146,7 +182,8 @@ const Sidebar = () => {
             Settings
           </span>
         )}
-      </NavLink>
+      </NavLink> : ""
+      }
 
       {/* ReactTooltip component with 'place' attribute set to 'right' */}
       <ReactTooltip id="Dashboard" place="right" />

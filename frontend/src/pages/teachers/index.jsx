@@ -1,13 +1,119 @@
-import React from 'react'
+import React, { useState } from "react";
+import axios from "axios";
+import { Helmet } from "react-helmet-async";
 
 const TeachersPage = () => {
-  return (
-    <div className='flex gap-[20px]'>
-      <div className='w-[300px] h-[200px] bg-[red] mb-[20px] rounded-[12px] p-[20px] flex justify-center items-center text-[32px] text-[white] font-bold hover:bg-[blue] transition-color duration-2000'>Card1</div>
-      <div className='w-[300px] h-[200px] bg-[red] mb-[20px] rounded-[12px] p-[20px] flex justify-center items-center text-[32px] text-[white] font-bold hover:bg-[blue] transition-color duration-2000'>Card2</div>
-      <div className='w-[300px] h-[200px] bg-[red] mb-[20px] rounded-[12px] p-[20px] flex justify-center items-center text-[32px] text-[white] font-bold hover:bg-[blue] transition-color duration-2000'>Card3</div>
-    </div>
-  )
-}
+  const [imageUrl, setImageUrl] = useState(""); // Tasvir URL
+  const [fullName, setFullName] = useState("");
+  const [positionDe, setPositionDe] = useState("");
+  const [positionRu, setPositionRu] = useState("");
+  const [positionEn, setPositionEn] = useState("");
 
-export default TeachersPage
+  // Tasvir URL o'zgartirish
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    // Faylni serverga yuklash va URL olish
+    // Agar siz faylni URL sifatida yubormoqchi bo'lsangiz,
+    // faylni serverga yuklab, olingan URLni setImageUrl ga saqlang
+    const imageUrl = "https://example.com/" + file.name; // Bu faqat misol
+    setImageUrl(imageUrl);
+  };
+
+  // Yuborish
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!imageUrl) {
+      alert("Iltimos, tasvirni yuklang!");
+      return;
+    }
+
+    try {
+      const payload = {
+        image: imageUrl,
+        full_name: fullName,
+        position_de: positionDe,
+        position_ru: positionRu,
+        position_en: positionEn,
+      };
+
+      const token = localStorage.getItem("token");
+
+      const response = await axios.post(
+        "https://example.com/api/team-member", // Bu sizning API endpointingiz
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("Success:", response.data);
+      alert("Jamoa a'zosi muvaffaqiyatli yaratildi!");
+    } catch (error) {
+      console.error("Xatolik:", error.response?.data || error.message);
+      alert("Yuborishda xatolik yuz berdi.");
+    }
+  };
+
+  return (
+    <>
+      <Helmet>
+        <title>CRM - Mijozlar</title>
+        <meta name="description" content="CRM tizimida mijozlar ro'yxati" />
+
+        <meta property="og:title" content="CRM - Mijozlar" />
+        <meta
+          property="og:description"
+          content="CRM tizimida mijozlar ro'yxati"
+        />
+        <meta property="og:image" content="/login-icon.svg" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://yourdomain.com/mijozlar" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
+
+      <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
+        <div className="grid grid-cols-2 gap-4">
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Position (DE)"
+            value={positionDe}
+            onChange={(e) => setPositionDe(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Position (RU)"
+            value={positionRu}
+            onChange={(e) => setPositionRu(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Position (EN)"
+            value={positionEn}
+            onChange={(e) => setPositionEn(e.target.value)}
+          />
+          <input type="file" accept="image/*" onChange={handleImageChange} />
+        </div>
+
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          Yaratish
+        </button>
+      </form>
+    </>
+  );
+};
+
+export default TeachersPage;
