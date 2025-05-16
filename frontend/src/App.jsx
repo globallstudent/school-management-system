@@ -26,7 +26,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LoginPage />} />
 
-        {token ? (
+        {/* {token ? ( */}
           <Route path="/" element={<Layout />}>
             {role === "admin" ? (
               <Route path="admin" element={<Outlet />}>
@@ -64,9 +64,9 @@ const App = () => {
               <Route path="/" element={<LoginPage />} />
             )}
           </Route>
-        ) : (
+        {/* ) : (
           ""
-        )}
+        )} */}
       </Routes>
     </BrowserRouter>
   );
