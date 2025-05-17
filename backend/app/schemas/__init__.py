@@ -12,3 +12,5 @@ from .result import *
 from .teacher import *
 from .subject import *
 from .student import *
+from .token import *
+from .user import *

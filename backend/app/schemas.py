@@ -1,13 +1,20 @@
 # schemas.py
-from pydantic import BaseModel, EmailStr
-from typing import Optional
-from datetime import datetime
+from pydantic import BaseModel, EmailStr, Field
+from typing import Optional, List, Union
+from datetime import datetime, timedelta
 from enum import Enum
 
 
 class UserSexEnum(str, Enum):
     MALE = "MALE"
     FEMALE = "FEMALE"
+
+
+class UserRoleEnum(str, Enum):
+    ADMIN = "ADMIN"
+    TEACHER = "TEACHER"
+    STUDENT = "STUDENT"
+    PARENT = "PARENT"
 
 
 class DayEnum(str, Enum):
@@ -18,8 +25,39 @@ class DayEnum(str, Enum):
     FRIDAY = "FRIDAY"
 
 
-# Base schemas for common properties
+# Auth schemas
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
+    role: Optional[UserRoleEnum] = None
+
+
 class UserBase(BaseModel):
+    username: str
+    email: Optional[EmailStr] = None
+
+
+class UserCreate(UserBase):
+    password: str
+    role: UserRoleEnum
+
+
+class UserResponse(UserBase):
+    id: str
+    role: UserRoleEnum
+    is_active: bool
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# Base schemas for common properties
+class PersonBase(BaseModel):
     username: str
     name: str
     surname: str
@@ -29,7 +67,7 @@ class UserBase(BaseModel):
 
 
 # Student schemas
-class StudentBase(UserBase):
+class StudentBase(PersonBase):
     blood_type: str
     sex: UserSexEnum
     birthday: datetime
@@ -41,6 +79,7 @@ class StudentCreate(StudentBase):
     class_id: int
     grade_id: int
     img: Optional[str] = None
+    password: str
 
 
 class StudentResponse(StudentBase):
@@ -56,7 +95,7 @@ class StudentResponse(StudentBase):
 
 
 # Teacher schemas
-class TeacherBase(UserBase):
+class TeacherBase(PersonBase):
     blood_type: str
     sex: UserSexEnum
     birthday: datetime
@@ -65,6 +104,7 @@ class TeacherBase(UserBase):
 class TeacherCreate(TeacherBase):
     id: str
     img: Optional[str] = None
+    password: str
 
 
 class TeacherResponse(TeacherBase):
@@ -77,12 +117,13 @@ class TeacherResponse(TeacherBase):
 
 
 # Parent schemas
-class ParentBase(UserBase):
+class ParentBase(PersonBase):
     pass
 
 
 class ParentCreate(ParentBase):
     id: str
+    password: str
 
 
 class ParentResponse(ParentBase):

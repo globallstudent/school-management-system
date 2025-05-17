@@ -4,9 +4,13 @@ from sqlalchemy.future import select
 from sqlalchemy import update, delete
 from typing import List, Optional, Any, Dict, Type, TypeVar, Generic
 
-from models import (
+from app.core.security import get_password_hash, verify_password
+from app.models import (
+    User,
+    Admin,
     Student,
     Teacher,
+    Parent,
     Class,
     Grade,
     Subject,
@@ -18,9 +22,12 @@ from models import (
     Event,
     Announcement,
 )
-from schemas import (
+from app.schemas import (
+    UserCreate,
+    AdminCreate,
     StudentCreate,
     TeacherCreate,
+    ParentCreate,
     ClassCreate,
     GradeCreate,
     SubjectCreate,
@@ -134,9 +141,58 @@ class CRUDClass(CRUDBase[Class, ClassCreate]):
         return result.scalars().all()
 
 
+class CRUDUser(CRUDBase[User, UserCreate]):
+    async def get_by_username(self, db: AsyncSession, *, username: str) -> Optional[User]:
+        result = await db.execute(select(User).filter(User.username == username))
+        return result.scalars().first()
+
+    async def get_by_email(self, db: AsyncSession, *, email: str) -> Optional[User]:
+        result = await db.execute(select(User).filter(User.email == email))
+        return result.scalars().first()
+
+    async def create(self, db: AsyncSession, *, obj_in: UserCreate) -> User:
+        db_obj = User(
+            username=obj_in.username,
+            email=obj_in.email,
+            hashed_password=get_password_hash(obj_in.password),
+            role=obj_in.role,
+        )
+        db.add(db_obj)
+        await db.commit()
+        await db.refresh(db_obj)
+        return db_obj
+
+    async def update_password(self, db: AsyncSession, *, user: User, password: str) -> User:
+        user.hashed_password = get_password_hash(password)
+        await db.commit()
+        await db.refresh(user)
+        return user
+
+    async def authenticate(self, db: AsyncSession, *, username: str, password: str) -> Optional[User]:
+        user = await self.get_by_username(db, username=username)
+        if not user:
+            return None
+        if not verify_password(password, user.hashed_password):
+            return None
+        return user
+
+
+class CRUDParent(CRUDBase[Parent, ParentCreate]):
+    async def get_by_username(self, db: AsyncSession, *, username: str) -> Optional[Parent]:
+        result = await db.execute(select(Parent).filter(Parent.username == username))
+        return result.scalars().first()
+
+    async def get_by_email(self, db: AsyncSession, *, email: str) -> Optional[Parent]:
+        result = await db.execute(select(Parent).filter(Parent.email == email))
+        return result.scalars().first()
+
+
 # Initialize CRUD instances
+user = CRUDUser(User)
+admin = CRUDBase[Admin, AdminCreate](Admin)
 student = CRUDStudent(Student)
 teacher = CRUDTeacher(Teacher)
+parent = CRUDParent(Parent)
 class_ = CRUDClass(Class)
 grade = CRUDBase[Grade, GradeCreate](Grade)
 subject = CRUDBase[Subject, SubjectCreate](Subject)

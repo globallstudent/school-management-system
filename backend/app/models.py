@@ -9,6 +9,7 @@ from sqlalchemy import (
     Enum as SQLAEnum,
     Table,
     Column,
+    Text,
 )
 from datetime import datetime, timezone
 from typing import Optional, List
@@ -19,6 +20,13 @@ from app.database import Base
 class UserSex(str, Enum):
     MALE = "MALE"
     FEMALE = "FEMALE"
+
+
+class UserRole(str, Enum):
+    ADMIN = "ADMIN"
+    TEACHER = "TEACHER"
+    STUDENT = "STUDENT"
+    PARENT = "PARENT"
 
 
 class Day(str, Enum):
@@ -38,11 +46,29 @@ teacher_subject = Table(
 )
 
 
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    username: Mapped[str] = mapped_column(String, unique=True)
+    email: Mapped[Optional[str]] = mapped_column(String, unique=True, nullable=True)
+    hashed_password: Mapped[str] = mapped_column(String)
+    role: Mapped[UserRole] = mapped_column(SQLAEnum(UserRole))
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, default=lambda: datetime.now(timezone.utc)
+    )
+
+
 class Admin(Base):
     __tablename__ = "admins"
 
     id: Mapped[str] = mapped_column(String, primary_key=True)
     username: Mapped[str] = mapped_column(String, unique=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"))
+    
+    # Relationships
+    user: Mapped["User"] = relationship("User")
 
 
 class Parent(Base):
@@ -58,9 +84,11 @@ class Parent(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime, default=lambda: datetime.now(timezone.utc)
     )
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"))
 
     # Relationships
     students: Mapped[List["Student"]] = relationship(back_populates="parent")
+    user: Mapped["User"] = relationship("User")
 
 
 class Grade(Base):
@@ -91,6 +119,7 @@ class Teacher(Base):
         DateTime, default=lambda: datetime.now(timezone.utc)
     )
     birthday: Mapped[datetime] = mapped_column(DateTime)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"))
 
     # Relationships
     subjects: Mapped[List["Subject"]] = relationship(
@@ -100,6 +129,7 @@ class Teacher(Base):
     supervised_classes: Mapped[List["Class"]] = relationship(
         back_populates="supervisor"
     )
+    user: Mapped["User"] = relationship("User")
 
 
 class Class(Base):
@@ -143,6 +173,7 @@ class Student(Base):
         DateTime, default=lambda: datetime.now(timezone.utc)
     )
     birthday: Mapped[datetime] = mapped_column(DateTime)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"))
 
     # Foreign keys
     parent_id: Mapped[str] = mapped_column(ForeignKey("parents.id"))
@@ -155,6 +186,7 @@ class Student(Base):
     grade: Mapped["Grade"] = relationship("Grade", back_populates="students")
     attendances: Mapped[List["Attendance"]] = relationship(back_populates="student")
     results: Mapped[List["Result"]] = relationship(back_populates="student")
+    user: Mapped["User"] = relationship("User")
 
 
 class Subject(Base):
