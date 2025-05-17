@@ -1,30 +1,32 @@
-<<<<<<< HEAD
-=======
-from sqlalchemy import Column, String, DateTime, ForeignKey, Table
-from sqlalchemy.orm import relationship
-from datetime import datetime
-from app.core.db import Base
+from sqlalchemy import String, DateTime, ForeignKey, Table, Column, Integer
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from datetime import datetime, timezone
+from typing import Optional, List
+from app.database import Base
 
 # Association Table for Teacher-Subject Many-to-Many
 teacher_subject = Table(
     "teacher_subject",
     Base.metadata,
-    Column("teacher_id", String, ForeignKey("teachers.id")),
-    Column("subject_id", ForeignKey("subjects.id"))
+    Column("teacher_id", String, ForeignKey("teachers.id"), primary_key=True),
+    Column("subject_id", Integer, ForeignKey("subjects.id"), primary_key=True),
 )
 
 class Teacher(Base):
     __tablename__ = "teachers"
 
-    id = Column(String, ForeignKey("users.id"), primary_key=True)
-    address = Column(String, nullable=False)
-    phone = Column(String, unique=True, nullable=True)
-    img = Column(String, nullable=True)
-    birthday = Column(DateTime, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    id: Mapped[str] = mapped_column(String, ForeignKey("users.id"), primary_key=True)
+    name: Mapped[str] = mapped_column(String)
+    surname: Mapped[str] = mapped_column(String)
+    address: Mapped[str] = mapped_column(String)
+    phone: Mapped[Optional[str]] = mapped_column(String, unique=True, nullable=True)
+    email: Mapped[Optional[str]] = mapped_column(String, unique=True, nullable=True)
+    img: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    birthday: Mapped[datetime] = mapped_column(DateTime)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-    user = relationship("User", back_populates="teacher")
-    subjects = relationship("Subject", secondary=teacher_subject, back_populates="teachers")
-    lessons = relationship("Lesson", back_populates="teacher")
-    classes = relationship("Class", back_populates="supervisor")
->>>>>>> 3a65f88e582f25320a11617ef96d5593226ef1b3
+    # Relationships
+    user: Mapped["User"] = relationship("User", back_populates="teacher")
+    subjects: Mapped[List["Subject"]] = relationship(secondary=teacher_subject, back_populates="teachers")
+    lessons: Mapped[List["Lesson"]] = relationship(back_populates="teacher")
+    supervised_classes: Mapped[List["Class"]] = relationship(back_populates="supervisor")

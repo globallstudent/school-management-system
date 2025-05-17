@@ -1,42 +1,37 @@
-<<<<<<< HEAD
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, DateTime, ForeignKey
-from datetime import datetime
-from typing import List
-=======
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Enum
-from sqlalchemy.orm import relationship
-from datetime import datetime
->>>>>>> 3a65f88e582f25320a11617ef96d5593226ef1b3
-from app.core.db import Base
-import enum
+from sqlalchemy import Integer, String, DateTime, ForeignKey, Enum as SQLAEnum
+from datetime import datetime, timezone
+from typing import Optional, List
+from enum import Enum
+from app.database import Base
 
-class DayOfWeek(str, enum.Enum):
-    MONDAY = "monday"
-    TUESDAY = "tuesday"
-    WEDNESDAY = "wednesday"
-    THURSDAY = "thursday"
-    FRIDAY = "friday"
-    SATURDAY = "saturday"
-    SUNDAY = "sunday"
+class DayOfWeek(str, Enum):
+    MONDAY = "MONDAY"
+    TUESDAY = "TUESDAY"
+    WEDNESDAY = "WEDNESDAY"
+    THURSDAY = "THURSDAY"
+    FRIDAY = "FRIDAY"
+    SATURDAY = "SATURDAY"
+    SUNDAY = "SUNDAY"
 
 class Lesson(Base):
     __tablename__ = "lessons"
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    day = Column(Enum(DayOfWeek), nullable=False)
-    start_time = Column(DateTime, nullable=False)
-    end_time = Column(DateTime, nullable=False)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String)
+    day: Mapped[DayOfWeek] = mapped_column(SQLAEnum(DayOfWeek))
+    start_time: Mapped[datetime] = mapped_column(DateTime)
+    end_time: Mapped[datetime] = mapped_column(DateTime)
 
-    subject_id = Column(Integer, ForeignKey("subjects.id"), nullable=False)
-    class_id = Column(Integer, ForeignKey("classes.id"), nullable=False)
-    teacher_id = Column(String, ForeignKey("teachers.id"), nullable=False)
+    # Foreign keys
+    subject_id: Mapped[int] = mapped_column(ForeignKey("subjects.id"))
+    class_id: Mapped[int] = mapped_column(ForeignKey("classes.id"))
+    teacher_id: Mapped[str] = mapped_column(ForeignKey("teachers.id"))
 
-    subject = relationship("Subject", back_populates="lessons")
-    class_ = relationship("Class", back_populates="lessons")
-    teacher = relationship("Teacher", back_populates="lessons")
-
-    exams = relationship("Exam", back_populates="lesson")
-    assignments = relationship("Assignment", back_populates="lesson")
-    attendances = relationship("Attendance", back_populates="lesson")
+    # Relationships
+    subject: Mapped["Subject"] = relationship("Subject", back_populates="lessons")
+    class_: Mapped["Class"] = relationship("Class", back_populates="lessons")
+    teacher: Mapped["Teacher"] = relationship("Teacher", back_populates="lessons")
+    exams: Mapped[List["Exam"]] = relationship(back_populates="lesson")
+    assignments: Mapped[List["Assignment"]] = relationship(back_populates="lesson")
+    attendances: Mapped[List["Attendance"]] = relationship(back_populates="lesson")

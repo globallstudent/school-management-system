@@ -1,20 +1,20 @@
-<<<<<<< HEAD
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, DateTime, ForeignKey, Boolean
-from datetime import datetime
-=======
-from sqlalchemy import Column, Integer, Boolean, ForeignKey, String
-from sqlalchemy.orm import relationship
->>>>>>> 3a65f88e582f25320a11617ef96d5593226ef1b3
-from app.core.db import Base
+from sqlalchemy import Integer, DateTime, Boolean, ForeignKey, String
+from datetime import datetime, timezone
+from typing import Optional
+from app.database import Base
 
 class Attendance(Base):
     __tablename__ = "attendances"
 
-    id = Column(Integer, primary_key=True, index=True)
-    student_id = Column(String, ForeignKey("students.id"), nullable=False)
-    lesson_id = Column(Integer, ForeignKey("lessons.id"), nullable=False)
-    present = Column(Boolean, default=True)
-
-    student = relationship("Student", back_populates="attendances")
-    lesson = relationship("Lesson", back_populates="attendances")
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    date: Mapped[datetime] = mapped_column(DateTime)
+    present: Mapped[bool] = mapped_column(Boolean)
+    
+    # Foreign keys
+    student_id: Mapped[str] = mapped_column(ForeignKey("students.id"))
+    lesson_id: Mapped[int] = mapped_column(ForeignKey("lessons.id"))
+    
+    # Relationships
+    student: Mapped["Student"] = relationship("Student", back_populates="attendances")
+    lesson: Mapped["Lesson"] = relationship("Lesson", back_populates="attendances")
